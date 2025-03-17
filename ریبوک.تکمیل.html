@@ -1,0 +1,2678 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>درگاه پرداخت|فروشگاه امیری</title>
+    
+    <!-- فونت‌ها و آیکون‌ها -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- کتابخانه‌های مورد نیاز -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- استایل‌های سفارشی -->
+    <link rel="stylesheet" href="">
+ <style>
+    /* ===== متغیرهای CSS ===== */
+:root {
+    /* رنگ‌های اصلی */
+    --primary-color: #03035b;
+    --primary-dark: #03035b;
+    --primary-light: #668cff;
+    --secondary-color: #ff6633;
+    --success-color: #0e6e3e;
+    --danger-color: #ff3333;
+    --warning-color: #ffcc00;
+    --info-color: #33ccff;
+    
+    /* رنگ‌های خنثی */
+    --dark: #333333;
+    --medium-dark: #666666;
+    --medium: #999999;
+    --light-medium: #cccccc;
+    --light: #f0f0f0;
+    --white: #ffffff;
+    
+    /* سایه‌ها */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+    
+    /* گرد گوشه‌ها */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    
+    /* فاصله‌ها */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    
+    /* انیمیشن‌ها */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* فونت‌ها */
+    --font-family: 'Vazirmatn', sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    
+    /* اندازه‌های کارت */
+    --card-width: 360px;
+    --card-height: 220px;
+}
+
+/* ===== تنظیمات پایه ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: #f8f9fa;
+    color: var(--dark);
+    line-height: 1.6;
+    direction: rtl;
+    text-align: right;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-md);
+}
+
+/* ===== کانتینر اصلی ===== */
+.smart-payment {
+    width: 100%;
+    max-width: 800px;
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    position: relative;
+}
+
+/* ===== هدر ===== */
+.smart-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: var(--white);
+    padding: var(--spacing-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.merchant-details {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.merchant-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--white);
+    padding: var(--spacing-xs);
+}
+
+.merchant-name {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+}
+
+.transaction-info {
+    display: flex;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    opacity: 0.9;
+}
+
+.timer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.pulse {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.amount-display {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(5px);
+}
+
+.amount-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+    opacity: 0.9;
+}
+
+.amount-value {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+}
+
+/* ===== روش‌های پرداخت ===== */
+.payment-methods {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--light);
+    border-bottom: 1px solid var(--light-medium);
+}
+
+.method {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    flex: 1;
+    max-width: 150px;
+    text-align: center;
+}
+
+.method i {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-xs);
+    color: var(--medium-dark);
+}
+
+.method span {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.method.active {
+    background-color: var(--primary-color);
+    color: var(--white);
+    box-shadow: var(--shadow-md);
+}
+
+.method.active i {
+    color: var(--white);
+}
+
+.method:hover:not(.active) {
+    background-color: var(--light-medium);
+}
+
+/* ===== کارت هوشمند ===== */
+.smart-card {
+    padding: var(--spacing-lg);
+    display: flex;
+    justify-content: center;
+    perspective: 1000px;
+}
+
+.card-wrapper {
+    width: var(--card-width);
+    height: var(--card-height);
+    position: relative;
+    transition: transform var(--transition-normal);
+    transform-style: preserve-3d;
+}
+
+.card-wrapper.flipped {
+    transform: rotateY(180deg);
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-front, .card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg, #2b2d42, #121420);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+}
+
+.card-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chip {
+    width: 45px;
+    height: 35px;
+    background: linear-gradient(135deg, #ffd700, #b8860b);
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.chip-line {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
+    height: 5px;
+}
+
+.chip-line:nth-child(1) {
+    width: 100%;
+    top: 5px;
+}
+
+.chip-line:nth-child(2) {
+    width: 100%;
+    top: 15px;
+}
+
+.chip-line:nth-child(3) {
+    width: 100%;
+    top: 25px;
+}
+
+.chip-line:nth-child(4) {
+    width: 70%;
+    top: 15px;
+    left: 15%;
+    transform: rotate(90deg);
+}
+
+.chip-main {
+    position: absolute;
+    width: 60%;
+    height: 70%;
+    background: linear-gradient(135deg, #e6c200, #ffd700);
+    top: 15%;
+    left: 20%;
+    border-radius: 3px;
+}
+
+.card-brand {
+    width: 60px;
+    height: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.card-number-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin: var(--spacing-md) 0;
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.card-number-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-sm);
+}
+
+.card-holder, .card-expires {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.card-holder label, .card-expires label {
+    opacity: 0.7;
+    font-size: var(--font-size-xs);
+    text-transform: uppercase;
+}
+
+.bank-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    opacity: 0.9;
+}
+
+.bank-info img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--white);
+    padding: 2px;
+}
+
+/* نمای پشت کارت */
+.magnetic-strip {
+    width: 100%;
+    height: 40px;
+    background-color: #333;
+    margin: var(--spacing-md) 0;
+}
+
+.signature-panel {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.cvv-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.cvv-wrapper label {
+    font-size: var(--font-size-xs);
+    opacity: 0.7;
+}
+
+.cvv-number {
+    font-family: monospace;
+    letter-spacing: 2px;
+}
+
+.card-networks {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+}
+
+.network-logo {
+    width: 40px;
+    height: 25px;
+    object-fit: contain;
+}
+
+/* ===== پرداخت با QR کد ===== */
+.qr-payment-section {
+    display: none;
+    padding: var(--spacing-lg);
+    text-align: center;
+}
+
+.qr-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+#qrCode {
+    width: 200px;
+    height: 200px;
+    background-color: var(--white);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    margin: 0 auto;
+}
+
+.qr-refresh {
+    margin-top: var(--spacing-md);
+}
+
+.refresh-qr-btn {
+    background-color: var(--light);
+    border: none;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-fast);
+}
+
+.refresh-qr-btn:hover {
+    background-color: var(--light-medium);
+}
+
+.qr-instructions {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.qr-instructions h3 {
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-color);
+}
+
+.qr-instructions p {
+    margin-bottom: var(--spacing-lg);
+    color: var(--medium-dark);
+}
+
+.accepted-apps {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-md);
+}
+
+.accepted-apps img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* ===== پرداخت با کیف پول ===== */
+.wallet-payment-section {
+    display: none;
+    padding: var(--spacing-lg);
+}
+
+.wallet-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-lg);
+    max-width: 400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+    background-color: var(--light);
+    border-radius: var(--radius-lg);
+}
+
+.wallet-balance {
+    text-align: center;
+    width: 100%;
+}
+
+.wallet-balance h3 {
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-color);
+}
+
+.balance-amount {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+}
+
+.wallet-status {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.wallet-status.available {
+    background-color: rgba(0, 204, 102, 0.1);
+    color: var(--success-color);
+}
+
+.wallet-status.insufficient {
+    background-color: rgba(255, 51, 51, 0.1);
+    color: var(--danger-color);
+}
+
+.wallet-pay-button {
+    width: 100%;
+    padding: var(--spacing-md);
+    background-color: var(--success-color);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-family);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-md);
+    transition: all var(--transition-fast);
+}
+
+.wallet-pay-button:hover {
+    background-color: #00b359;
+}
+
+.wallet-pay-button:active {
+    transform: scale(0.98);
+}
+
+/* ===== فرم هوشمند ===== */
+.smart-form {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--light-medium);
+}
+
+.form-progress {
+    margin-bottom: var(--spacing-xl);
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: var(--light);
+    border-radius: 3px;
+    margin-bottom: var(--spacing-md);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--primary-color);
+    width: 0;
+    transition: width var(--transition-normal);
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    width: 33.333%;
+    position: relative;
+    color: var(--medium);
+    transition: color var(--transition-normal);
+}
+
+.step i {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--light);
+    color: var(--medium);
+    border-radius: 50%;
+    margin-bottom: var(--spacing-xs);
+    transition: all var(--transition-normal);
+}
+
+.step span {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+.step.active {
+    color: var(--primary-color);
+}
+
+.step.active i {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.step.completed i {
+    background-color: var(--success-color);
+    color: var(--white);
+}
+
+.step.completed i::before {
+    content: "\f00c";
+}
+
+/* بخش‌های فرم */
+.form-sections {
+    position: relative;
+    min-height: 300px;
+}
+
+.form-section {
+    display: none;
+    animation: fadeIn var(--transition-normal);
+}
+
+.form-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* گروه‌های ورودی */
+.input-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 500;
+    color: var(--medium-dark);
+}
+
+.input-group input[type="text"],
+.input-group input[type="password"] {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--light-medium);
+    border-radius: var(--radius-md);
+    font-family: var(--font-family);
+    font-size: var(--font-size-md);
+    transition: border-color var(--transition-fast);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(51, 102, 255, 0.2);
+}
+
+.input-hint {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+    color: var(--medium);
+}
+
+.validation-message {
+    font-size: var(--font-size-xs);
+    color: var(--danger-color);
+    margin-top: var(--spacing-xs);
+    min-height: 18px;
+}
+
+/* شماره کارت */
+.segmented-input {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.segment {
+    flex: 1;
+    text-align: center;
+    font-family: monospace;
+    letter-spacing: 2px;
+}
+
+/* تاریخ انقضا و CVV */
+.input-row {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.input-row .input-group {
+    flex: 1;
+}
+
+.expiry-inputs {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.expiry-inputs input {
+    width: 60px;
+    text-align: center;
+}
+
+.divider {
+    font-size: var(--font-size-lg);
+    color: var(--medium);
+}
+
+.cvv-input {
+    position: relative;
+}
+
+.toggle-cvv {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--medium);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+}
+
+.toggle-cvv:hover {
+    color: var(--medium-dark);
+}
+
+/* کارت‌های ذخیره شده */
+.card-saved-options {
+    margin-top: var(--spacing-lg);
+}
+
+.option-label {
+    font-size: var(--font-size-sm);
+    color: var(--medium-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.saved-cards {
+    display: flex;
+    gap: var(--spacing-md);
+    overflow-x: auto;
+    padding-bottom: var(--spacing-sm);
+}
+
+.saved-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--light);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.saved-card:hover {
+    background-color: var(--light-medium);
+}
+
+.saved-card-logo {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.saved-card-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.saved-card-number {
+    font-family: monospace;
+    font-size: var(--font-size-sm);
+}
+
+/* چک‌باکس‌ها */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background-color: var(--light);
+    border: 1px solid var(--light-medium);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.checkbox-container:hover .checkmark {
+    background-color: var(--light-medium);
+}
+
+.checkbox-container input:checked ~ .checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkbox-text {
+    font-size: var(--font-size-sm);
+}
+
+.terms-link {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+/* دکمه‌ها */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--spacing-xl);
+}
+
+.next-button, .back-button, .submit-button {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-family);
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    transition: all var(--transition-fast);
+}
+
+.next-button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    margin-right: auto;
+}
+
+.next-button:hover:not(:disabled) {
+    background-color: var(--primary-dark);
+}
+
+.back-button {
+    background-color: var(--light);
+    color: var(--medium-dark);
+}
+
+.back-button:hover {
+    background-color: var(--light-medium);
+}
+
+.submit-button {
+    background-color: var(--success-color);
+    color: var(--white);
+    position: relative;
+    padding-right: var(--spacing-xl);
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color: #00b359;
+}
+
+.submit-button .loader {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--white);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-fast);
+}
+
+.submit-button.loading .loader {
+    opacity: 1;
+    visibility: visible;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: translateY(-50%) rotate(360deg); }
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* بخش تایید نهایی */
+.confirmation-details {
+    background-color: var(--light);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.confirmation-details h3 {
+    margin-bottom: var(--spacing-lg);
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--light-medium);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row span {
+    color: var(--medium-dark);
+}
+
+.transaction-details {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px dashed var(--light-medium);
+}
+
+/* فوتر */
+.smart-footer {
+    background-color: var(--light);
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-lg);
+    border-top: 1px solid var(--light-medium);
+}
+
+.security-badges {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    color: var(--medium-dark);
+}
+
+.badge i {
+    color: var(--primary-color);
+}
+
+.support-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: var(--medium-dark);
+}
+
+.support-phone {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.trusted-by {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    color: var(--medium-dark);
+}
+
+.trust-logos {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.trust-logos img {
+    height: 30px;
+    width: auto;
+}
+
+/* ===== ریسپانسیو ===== */
+@media (max-width: 768px) {
+    .smart-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .amount-display {
+        width: 100%;
+    }
+    
+    .payment-methods {
+        flex-wrap: wrap;
+    }
+    
+    .method {
+        min-width: 100px;
+    }
+    
+    .input-row {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+    
+    .button-group {
+        flex-direction: column-reverse;
+        gap: var(--spacing-md);
+    }
+    
+    .next-button, .back-button, .submit-button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .smart-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 0;
+    }
+}
+    
+
+ </style>
+</head>
+<body>
+    <div class="smart-payment">
+        <!-- هدر هوشمند -->
+        <header class="smart-header">
+            <div class="merchant-details">
+                <img src="بنر.jpg" alt="لوگو فروشگاه" class="merchant-logo">
+                <div class="merchant-info">
+                    <h2 class="merchant-name">فروشگاه امیری</h2>
+                    <div class="transaction-info">
+                        <span class="order-id">شماره سفارش: #678901</span>
+                        <span class="timer">
+                            <i class="fas fa-clock pulse"></i>
+                            زمان باقیمانده: <span id="countdown">10:00</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="amount-display">
+                <span class="amount-label">مبلغ قابل پرداخت</span>
+                <span class="amount-value">3,000,00 تومان</span>
+            </div>
+        </header>
+
+        <!-- انتخاب روش پرداخت -->
+        <div class="payment-methods">
+            <div class="method active" data-method="card">
+                <i class="fas fa-credit-card"></i>
+                <span>پرداخت با کارت بانکی</span>
+            </div>
+            <div class="method" data-method="qr">
+                <i class="fas fa-qrcode"></i>
+                <span>پرداخت با QR کد</span>
+            </div>
+            <div class="method" data-method="wallet">
+                <i class="fas fa-wallet"></i>
+                <span>کیف پول دیجیتال</span>
+            </div>
+        </div>
+
+        <!-- کارت هوشمند -->
+        <div class="smart-card" id="cardMethod">
+            <div class="card-wrapper">
+                <div class="card">
+                    <!-- نمای جلوی کارت -->
+                    <div class="card-front">
+                        <div class="card-type">
+                            <div class="chip">
+                                <div class="chip-line"></div>
+                                <div class="chip-line"></div>
+                                <div class="chip-line"></div>
+                                <div class="chip-line"></div>
+                                <div class="chip-main"></div>
+                            </div>
+                            <div class="card-brand" id="cardBrand"></div>
+                        </div>
+                        <div class="card-number-wrapper">
+                            <div class="card-number-block">
+                                <span id="cardNumber1">####</span>
+                            </div>
+                            <div class="card-number-block">
+                                <span id="cardNumber2">####</span>
+                            </div>
+                            <div class="card-number-block">
+                                <span id="cardNumber3">####</span>
+                            </div>
+                            <div class="card-number-block">
+                                <span id="cardNumber4">####</span>
+                            </div>
+                        </div>
+                        <div class="card-details">
+                            <div class="card-holder">
+                                <label>دارنده کارت</label>
+                                <div id="cardHolderPreview">نام و نام خانوادگی</div>
+                            </div>
+                            <div class="card-expires">
+                                <label>تاریخ انقضا</label>
+                                <div id="cardExpiryPreview">MM/YY</div>
+                            </div>
+                        </div>
+                        <div class="bank-info" id="bankInfo">
+                            <img src="bank-logo.png" alt="لوگو بانک" id="bankLogo">
+                            <span id="bankName">بانک</span>
+                        </div>
+                    </div>
+                    
+                    <!-- نمای پشت کارت -->
+                    <div class="card-back">
+                        <div class="magnetic-strip"></div>
+                        <div class="signature-panel">
+                            <div class="cvv-wrapper">
+                                <label>CVV2</label>
+                                <div class="cvv-number" id="cvvPreview">***</div>
+                            </div>
+                        </div>
+                        <div class="card-networks">
+                            <img src="shetab.png" alt="شتاب" class="network-logo">
+                            <img src="shaparak.png" alt="شاپرک" class="network-logo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- پرداخت با QR کد -->
+        <div class="qr-payment-section" id="qrMethod">
+            <div class="qr-container">
+                <div id="qrCode"></div>
+            </div>
+            <div class="qr-instructions">
+                <h3>پرداخت با اسکن QR کد</h3>
+                <p>برای پرداخت، QR کد بالا را با اپلیکیشن بانکی خود اسکن کنید.</p>
+                <div class="accepted-apps">
+                    <img src="app1.png" alt="اپلیکیشن ۱">
+                    <img src="app2.png" alt="اپلیکیشن ۲">
+                    <img src="app3.png" alt="اپلیکیشن ۳">
+                </div>
+            </div>
+        </div>
+
+        <!-- پرداخت با کیف پول -->
+        <div class="wallet-payment-section" id="walletMethod">
+            <div class="wallet-options">
+                <div class="wallet-balance">
+                    <h3>موجودی کیف پول</h3>
+                    <div class="balance-amount">3,200,000 تومان</div>
+                    <div class="wallet-status available">موجودی کافی</div>
+                </div>
+                <button class="wallet-pay-button">
+                    <i class="fas fa-wallet"></i>
+                    پرداخت با کیف پول
+                </button>
+            </div>
+        </div>
+
+        <!-- فرم هوشمند -->
+        <form id="smartPaymentForm" class="smart-form">
+            <!-- نوار پیشرفت -->
+            <div class="form-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step active">
+                        <i class="fas fa-credit-card"></i>
+                        <span>شماره کارت</span>
+                    </div>
+                    <div class="step">
+                        <i class="fas fa-user"></i>
+                        <span>اطلاعات دارنده</span>
+                    </div>
+                    <div class="step">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>تایید نهایی</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بخش‌های فرم -->
+            <div class="form-sections">
+                <!-- بخش شماره کارت -->
+                <section class="form-section active" id="cardNumberSection">
+                    <div class="input-group card-number">
+                        <label>شماره کارت</label>
+                        <div class="segmented-input">
+                            <input type="text" 
+                                   maxlength="4" 
+                                   class="segment" 
+                                   id="seg1" 
+                                   placeholder="####"
+                                   inputmode="numeric"
+                                   autocomplete="cc-number">
+                            <input type="text" 
+                                   maxlength="4" 
+                                   class="segment" 
+                                   id="seg2" 
+                                   placeholder="####"
+                                   inputmode="numeric"
+                                   autocomplete="off">
+                            <input type="text" 
+                                   maxlength="4" 
+                                   class="segment" 
+                                   id="seg3" 
+                                   placeholder="####"
+                                   inputmode="numeric"
+                                   autocomplete="off">
+                            <input type="text" 
+                                   maxlength="4" 
+                                   class="segment" 
+                                   id="seg4" 
+                                   placeholder="####"
+                                   inputmode="numeric"
+                                   autocomplete="off">
+                        </div>
+                        <div class="input-hint">
+                            <i class="fas fa-info-circle"></i>
+                            <span>شماره 16 رقمی درج شده روی کارت را وارد کنید</span>
+                        </div>
+                        <div class="card-saved-options">
+                            <div class="option-label">کارت‌های ذخیره شده:</div>
+                            <div class="saved-cards">
+                                <div class="saved-card" data-card="6037-9913-****-5412">
+                                    <div class="saved-card-logo">
+                                        <img src="mellat.png" alt="بانک ملت">
+                                    </div>
+                                    <div class="saved-card-number">•••• 5412</div>
+                                </div>
+                                <div class="saved-card" data-card="6219-8610-****-3829">
+                                    <div class="saved-card-logo">
+                                        <img src="saderat.png" alt="بانک صادرات">
+                                    </div>
+                                    <div class="saved-card-number">•••• 3829</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="next-button" disabled>
+                        <span>مرحله بعد</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </section>
+
+                <!-- بخش اطلاعات دارنده -->
+                <section class="form-section" id="cardHolderSection">
+                    <div class="input-group">
+                        <label>نام و نام خانوادگی دارنده کارت</label>
+                        <input type="text" 
+                               id="cardHolder" 
+                               placeholder="مثال: محمد امیری"
+                               autocomplete="cc-name">
+                        <div class="input-hint">
+                            <i class="fas fa-info-circle"></i>
+                            <span>نام را دقیقاً مطابق با کارت وارد کنید</span>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group expiry">
+                            <label>تاریخ انقضا</label>
+                            <div class="expiry-wrapper">
+                                <div class="expiry-inputs">
+                                    <input type="text" 
+                                           maxlength="2" 
+                                           placeholder="ماه" 
+                                           id="month" 
+                                           autocomplete="cc-exp-month"
+                                           inputmode="numeric">
+                                    <span class="divider">/</span>
+                                    <input type="text" 
+                                           maxlength="2" 
+                                           placeholder="سال" 
+                                           id="year" 
+                                           autocomplete="cc-exp-year"
+                                           inputmode="numeric">
+                                </div>
+                                <div class="expiry-hint">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>تاریخ را به صورت دو رقمی وارد کنید (مثال: 05/03)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group cvv">
+                            <label>CVV2</label>
+                            <div class="cvv-input">
+                                <input type="password" 
+                                       maxlength="4" 
+                                       id="cvv" 
+                                       placeholder="***"
+                                       autocomplete="cc-csc"
+                                       inputmode="numeric">
+                                <button type="button" class="toggle-cvv">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="input-hint">
+                                <i class="fas fa-info-circle"></i>
+                                <span>کد 3 یا 4 رقمی پشت کارت</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                         
+                    <div class="save-card-option">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="saveCard">
+                            <span class="checkmark"></span>
+                            <span class="checkbox-text">ذخیره اطلاعات این کارت برای پرداخت‌های بعدی</span>
+                        </label>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button type="button" class="back-button">
+                            <i class="fas fa-arrow-right"></i>
+                            <span>مرحله قبل</span>
+                        </button>
+                        <button type="button" class="next-button" disabled>
+                            <span>مرحله بعد</span>
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- بخش تایید نهایی -->
+                <section class="form-section" id="confirmationSection">
+                    <div class="confirmation-details">
+                        <h3>تایید اطلاعات پرداخت</h3>
+                        <div class="detail-row">
+                            <span>شماره کارت:</span>
+                            <strong id="confirmCardNumber"></strong>
+                        </div>
+                        <div class="detail-row">
+                            <span>نام دارنده کارت:</span>
+                            <strong id="confirmCardHolder"></strong>
+                        </div>
+                        <div class="detail-row">
+                            <span>بانک صادرکننده:</span>
+                            <strong id="confirmBankName" class="bank-info"></strong>
+                        </div>
+                        <div class="detail-row">
+                            <span>مبلغ قابل پرداخت:</span>
+                            <strong class="amount">2,500,000 تومان</strong>
+                        </div>
+                        
+                        <div class="transaction-details">
+                            <div class="detail-row">
+                                <span>توضیحات تراکنش:</span>
+                                <strong>خرید محصولات دیجیتال</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>شناسه پرداخت:</span>
+                                <strong>57839214</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>تاریخ و زمان:</span>
+                                <strong id="currentDateTime"></strong>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="terms-agreement">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="agreeTerms">
+                            <span class="checkmark"></span>
+                            <span class="checkbox-text">با <a href="#" class="terms-link">قوانین و مقررات</a> موافقم و صحت اطلاعات فوق را تایید می‌کنم.</span>
+                        </label>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button type="button" class="back-button">
+                            <i class="fas fa-arrow-right"></i>
+                            <span>ویرایش اطلاعات</span>
+                        </button>
+                        <button type="submit" class="submit-button" disabled>
+                            <span>پرداخت امن</span>
+                            <i class="fas fa-lock"></i>
+                            <div class="loader"></div>
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </form>
+
+        <!-- فوتر هوشمند -->
+        <footer class="smart-footer">
+            <div class="security-badges">
+                <div class="badge">
+                    <i class="fas fa-lock"></i>
+                    <span>پرداخت امن</span>
+                </div>
+                <div class="badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>رمزنگاری SSL</span>
+                </div>
+                <div class="badge">
+                    <i class="fas fa-headset"></i>
+                    <span>پشتیبانی 24/7</span>
+                </div>
+            </div>
+            <div class="support-info">
+                <span>شماره پشتیبانی:</span>
+                <a href="tel:+982100000000" class="support-phone">
+                    <i class="fas fa-phone"></i>
+                    021-00000000
+                </a>
+            </div>
+            <div class="trusted-by">
+                <span>مورد اعتماد:</span>
+                <div class="trust-logos">
+                    <img src="enamad.png" alt="نماد اعتماد الکترونیکی">
+                    <img src="samandehi.png" alt="نشان ساماندهی">
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- اسکریپت‌های سفارشی -->
+    <script src=""></script>
+    <!-- کتابخانه‌های مورد نیاز -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+<!-- فایل اصلی درگاه پرداخت -->
+<script src="path/to/your/main-payment-script.js"></script>
+
+<!-- فایل فعال‌سازی دکمه‌ها -->
+<script src="payment-buttons.js"></script>
+
+<!-- اسکریپت فوری برای فعال‌سازی دکمه‌ها -->
+<script>
+    // فعال‌سازی فوری دکمه‌ها
+    document.querySelectorAll('.next-button, .back-button, .submit-button').forEach(button => {
+        button.removeAttribute('disabled');
+        
+        // اضافه کردن رویداد کلیک اضافی برای اطمینان
+        button.addEventListener('click', function(e) {
+            console.log('دکمه کلیک شد:', this.className);
+            
+            // اگر دکمه بعدی است
+            if (this.classList.contains('next-button')) {
+                const currentSection = this.closest('.form-section');
+                const nextSection = currentSection.nextElementSibling;
+                
+                if (nextSection && nextSection.classList.contains('form-section')) {
+                    currentSection.classList.remove('active');
+                    nextSection.classList.add('active');
+                }
+            }
+            
+            // اگر دکمه قبلی است
+            if (this.classList.contains('back-button')) {
+                const currentSection = this.closest('.form-section');
+                const prevSection = currentSection.previousElementSibling;
+                
+                if (prevSection && prevSection.classList.contains('form-section')) {
+                    currentSection.classList.remove('active');
+                    prevSection.classList.add('active');
+                }
+            }
+        });
+    });
+    
+    // فعال‌سازی چک‌باکس موافقت با قوانین
+    const agreeTerms = document.getElementById('agreeTerms');
+    const submitButton = document.querySelector('.submit-button');
+    
+    if (agreeTerms && submitButton) {
+        // تنظیم وضعیت اولیه
+        submitButton.disabled = !agreeTerms.checked;
+        
+        // اضافه کردن رویداد تغییر
+        agreeTerms.addEventListener('change', function() {
+            submitButton.disabled = !this.checked;
+        });
+    } else if (submitButton) {
+        // اگر چک‌باکس وجود ندارد، دکمه را فعال کن
+        submitButton.disabled = false;
+    }
+</script>
+<!-- فایل رفع خطای تاریخ انقضا -->
+<script src="expiry-fix.js"></script>
+
+<!-- اسکریپت فوری برای رفع خطای تاریخ انقضا -->
+<script>
+    // رفع فوری خطای تاریخ انقضا
+    document.addEventListener('DOMContentLoaded', function() {
+        const monthInput = document.getElementById('month');
+        const yearInput = document.getElementById('year');
+        const nextButton = document.querySelectorAll('.next-button')[1];
+        
+        if (monthInput && yearInput && nextButton) {
+            // تنظیم رویدادهای اصلاح شده
+            const fixExpiryValidation = function() {
+                const month = monthInput.value;
+                const year = yearInput.value;
+                
+                // فعال کردن دکمه اگر هر دو فیلد پر شده‌اند
+                if (month.length === 2 && year.length === 2) {
+                    // بررسی معتبر بودن تاریخ
+                    const currentDate = new Date();
+                    const currentYear = currentDate.getFullYear() % 100;
+                    const currentMonth = currentDate.getMonth() + 1;
+                    
+                    const monthNum = parseInt(month);
+                    const yearNum = parseInt(year);
+                    
+                    // اعتبارسنجی
+                    if (monthNum >= 1 && monthNum <= 12 && 
+                        (yearNum > currentYear || (yearNum === currentYear && monthNum >= currentMonth))) {
+                        // تاریخ معتبر است
+                        document.getElementById('expiryValidation').textContent = '';
+                        // بررسی سایر فیلدها
+                        const cardHolder = document.getElementById('cardHolder');
+                        const cvvInput = document.getElementById('cvv');
+                        if (cardHolder && cvvInput) {
+                            nextButton.disabled = !(cardHolder.value.length > 3 && cvvInput.value.length >= 3);
+                        } else {
+                            nextButton.disabled = false;
+                        }
+                    } else {
+                        // تاریخ نامعتبر است
+                        if (monthNum < 1 || monthNum > 12) {
+                            document.getElementById('expiryValidation').textContent = 'ماه باید بین 1 تا 12 باشد';
+                        } else {
+                            document.getElementById('expiryValidation').textContent = 'تاریخ انقضای کارت گذشته است';
+                        }
+                        nextButton.disabled = true;
+                    }
+                }
+            };
+            
+            // اضافه کردن رویدادها
+            monthInput.addEventListener('input', fixExpiryValidation);
+            yearInput.addEventListener('input', fixExpiryValidation);
+            
+            // اجرای اولیه
+            setTimeout(fixExpiryValidation, 100);
+        }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+    // متغیرهای اصلی
+    const cardWrapper = document.querySelector('.card-wrapper');
+    const form = document.getElementById('smartPaymentForm');
+    const sections = document.querySelectorAll('.form-section');
+    const progressFill = document.querySelector('.progress-fill');
+    const progressSteps = document.querySelectorAll('.step');
+    const paymentMethods = document.querySelectorAll('.method');
+    const cardMethod = document.getElementById('cardMethod');
+    const qrMethod = document.getElementById('qrMethod');
+    const walletMethod = document.getElementById('walletMethod');
+    
+    // متغیرهای ورودی کارت
+    const seg1 = document.getElementById('seg1');
+    const seg2 = document.getElementById('seg2');
+    const seg3 = document.getElementById('seg3');
+    const seg4 = document.getElementById('seg4');
+    const cardHolder = document.getElementById('cardHolder');
+    const monthInput = document.getElementById('month');
+    const yearInput = document.getElementById('year');
+    const cvvInput = document.getElementById('cvv');
+    const dynamicPassword = document.getElementById('dynamicPassword');
+    const saveCardCheckbox = document.getElementById('saveCard');
+    const agreeTermsCheckbox = document.getElementById('agreeTerms');
+    
+    // متغیرهای نمایش کارت
+    const cardNumber1 = document.getElementById('cardNumber1');
+    const cardNumber2 = document.getElementById('cardNumber2');
+    const cardNumber3 = document.getElementById('cardNumber3');
+    const cardNumber4 = document.getElementById('cardNumber4');
+    const cardHolderPreview = document.getElementById('cardHolderPreview');
+    const cardExpiryPreview = document.getElementById('cardExpiryPreview');
+    const cvvPreview = document.getElementById('cvvPreview');
+    const cardBrand = document.getElementById('cardBrand');
+    const bankName = document.getElementById('bankName');
+    const bankLogo = document.getElementById('bankLogo');
+    
+    // متغیرهای بخش تایید
+    const confirmCardNumber = document.getElementById('confirmCardNumber');
+    const confirmCardHolder = document.getElementById('confirmCardHolder');
+    const confirmBankName = document.getElementById('confirmBankName');
+    const currentDateTime = document.getElementById('currentDateTime');
+    
+    // دکمه‌ها
+    const nextButtons = document.querySelectorAll('.next-button');
+    const backButtons = document.querySelectorAll('.back-button');
+    const submitButton = document.querySelector('.submit-button');
+    const toggleCvvButton = document.querySelector('.toggle-cvv');
+    const requestPasswordButton = document.querySelector('.request-password');
+    const savedCards = document.querySelectorAll('.saved-card');
+    const walletPayButton = document.querySelector('.wallet-pay-button');
+    
+    // تایمر شمارنده معکوس
+    const countdownElement = document.getElementById('countdown');
+    let countdownInterval;
+    let remainingTime = 600; // 10 دقیقه به ثانیه
+    
+    // رمزنگاری QR کد
+    const qrCodeElement = document.getElementById('qrCode');
+    
+    // ===== بخش تایمر شمارنده معکوس =====
+    function startCountdown() {
+        updateCountdownDisplay();
+        
+        countdownInterval = setInterval(() => {
+            remainingTime--;
+            
+            if (remainingTime <= 0) {
+                clearInterval(countdownInterval);
+                sessionExpired();
+            } else {
+                updateCountdownDisplay();
+            }
+        }, 1000);
+    }
+    
+    function updateCountdownDisplay() {
+        const minutes = Math.floor(remainingTime / 60);
+        const seconds = remainingTime % 60;
+        countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        // تغییر رنگ تایمر در زمان‌های کم
+        if (remainingTime < 60) {
+            countdownElement.parentElement.classList.add('warning');
+        }
+    }
+    
+    function sessionExpired() {
+        Swal.fire({
+            title: 'پایان زمان پرداخت',
+            text: 'زمان انجام تراکنش به پایان رسیده است. لطفاً مجدداً تلاش کنید.',
+            icon: 'error',
+            confirmButtonText: 'بازگشت به فروشگاه'
+        }).then(() => {
+            window.location.href = 'https://example.com/shop';
+        });
+    }
+    
+    // ===== بخش QR کد =====
+    function generateQRCode() {
+        if (window.QRCode && qrCodeElement) {
+            new QRCode(qrCodeElement, {
+                text: "https://example.com/pay/123456789",
+                width: 180,
+                height: 180,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+    }
+    
+    // ===== بخش تشخیص نوع کارت و بانک =====
+    const bankInfo = {
+        '603799': { name: 'بانک ملی', logo: 'melli.png' },
+        '589210': { name: 'بانک سپه', logo: 'sepah.png' },
+        '627648': { name: 'بانک صادرات', logo: 'saderat.png' },
+        '627961': { name: 'بانک صنعت و معدن', logo: 'sanat.png' },
+        '603770': { name: 'بانک کشاورزی', logo: 'keshavarzi.png' },
+        '628023': { name: 'بانک مسکن', logo: 'maskan.png' },
+        '627760': { name: 'پست بانک', logo: 'post.png' },
+        '502908': { name: 'بانک توسعه تعاون', logo: 'tosee.png' },
+        '627412': { name: 'بانک اقتصاد نوین', logo: 'eghtesad.png' },
+        '622106': { name: 'بانک پارسیان', logo: 'parsian.png' },
+        '502229': { name: 'بانک پاسارگاد', logo: 'pasargad.png' },
+        '627488': { name: 'بانک کارآفرین', logo: 'karafarin.png' },
+        '621986': { name: 'بانک سامان', logo: 'saman.png' },
+        '639346': { name: 'بانک سینا', logo: 'sina.png' },
+        '639607': { name: 'بانک سرمایه', logo: 'sarmayeh.png' },
+        '502806': { name: 'بانک شهر', logo: 'shahr.png' },
+        '502938': { name: 'بانک دی', logo: 'day.png' },
+        '603769': { name: 'بانک صادرات', logo: 'saderat.png' },
+        '610433': { name: 'بانک ملت', logo: 'mellat.png' },
+        '589463': { name: 'بانک رفاه', logo: 'refah.png' },
+        '627353': { name: 'بانک تجارت', logo: 'tejarat.png' }
+    };
+    
+    function detectCardType(cardNumber) {
+        // تشخیص نوع کارت (ویزا، مستر، امکس و...)
+        let cardType = '';
+        let brandLogo = '';
+        
+        // نمونه تشخیص برند کارت
+        if (cardNumber.startsWith('4')) {
+            cardType = 'ویزا کارت';
+            brandLogo = 'url(visa.png)';
+        } else if (cardNumber.startsWith('5')) {
+            cardType = 'مستر کارت';
+            brandLogo = 'url(mastercard.png)';
+        } else if (cardNumber.startsWith('6')) {
+            cardType = 'شتاب';
+            brandLogo = 'url(shetab.png)';
+        }
+        
+        // تشخیص بانک صادرکننده
+        let bankInfo = detectBank(cardNumber);
+        
+        return {
+            type: cardType,
+            logo: brandLogo,
+            bank: bankInfo
+        };
+    }
+    
+    function detectBank(cardNumber) {
+        // بررسی 6 رقم اول برای تشخیص بانک
+        const prefix = cardNumber.substring(0, 6);
+        
+        for (let key in bankInfo) {
+            if (prefix.startsWith(key)) {
+                return bankInfo[key];
+            }
+        }
+        
+        return { name: 'نامشخص', logo: 'bank-logo.png' };
+    }
+    
+    // ===== مدیریت ورودی‌ها =====
+    function setupCardNumberInputs() {
+        // عملکرد جهش خودکار بین فیلدهای شماره کارت
+        const segments = [seg1, seg2, seg3, seg4];
+        
+        segments.forEach((segment, index) => {
+            segment.addEventListener('input', function(e) {
+                // حذف کاراکترهای غیر عددی
+                this.value = this.value.replace(/\D/g, '');
+                
+                // نمایش در کارت
+                updateCardNumberDisplay();
+                
+                // جهش خودکار به فیلد بعدی
+                if (this.value.length === this.maxLength && index < segments.length - 1) {
+                    segments[index + 1].focus();
+                }
+                
+                // بررسی تکمیل بودن شماره کارت
+                checkCardNumberCompletion();
+            });
+            
+            // امکان برگشت با کلید Backspace
+            segment.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                    segments[index - 1].focus();
+                }
+            });
+        });
+        
+        // کلیک روی کارت‌های ذخیره شده
+        savedCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const cardNumber = this.dataset.card;
+                const parts = cardNumber.split('-');
+                
+                seg1.value = parts[0];
+                seg2.value = parts[1];
+                seg3.value = parts[2].replace('*', '');
+                seg4.value = parts[3];
+                
+                updateCardNumberDisplay();
+                checkCardNumberCompletion();
+            });
+        });
+    }
+    
+    function updateCardNumberDisplay() {
+        // نمایش شماره کارت روی تصویر کارت
+        cardNumber1.textContent = seg1.value.padEnd(4, '#');
+        cardNumber2.textContent = seg2.value.padEnd(4, '#');
+        cardNumber3.textContent = seg3.value.padEnd(4, '#');
+        cardNumber4.textContent = seg4.value.padEnd(4, '#');
+        
+        // تشخیص نوع کارت و بانک
+        const fullCardNumber = seg1.value + seg2.value + seg3.value + seg4.value;
+        if (fullCardNumber.length >= 6) {
+            const cardInfo = detectCardType(fullCardNumber);
+            
+            // نمایش لوگوی برند کارت
+            if (cardInfo.logo) {
+                cardBrand.style.backgroundImage = cardInfo.logo;
+            }
+            
+            // نمایش اطلاعات بانک
+            if (cardInfo.bank) {
+                bankName.textContent = cardInfo.bank.name;
+                bankLogo.src = cardInfo.bank.logo;
+            }
+        }
+    }
+    
+    function checkCardNumberCompletion() {
+        // بررسی تکمیل بودن شماره کارت
+        const isComplete = seg1.value.length === 4 && 
+                          seg2.value.length === 4 && 
+                          seg3.value.length === 4 && 
+                          seg4.value.length === 4;
+        
+        // غیرفعال/فعال کردن دکمه مرحله بعد
+        nextButtons[0].disabled = !isComplete;
+        
+        // اعتبارسنجی با الگوریتم Luhn
+        if (isComplete) {
+            const fullCardNumber = seg1.value + seg2.value + seg3.value + seg4.value;
+            const isValid = validateCardNumber(fullCardNumber);
+            
+            if (!isValid) {
+                Swal.fire({
+                    title: 'خطا',
+                    text: 'شماره کارت وارد شده معتبر نیست.',
+                    icon: 'error',
+                    confirmButtonText: 'تصحیح'
+                });
+                nextButtons[0].disabled = true;
+            }
+        }
+    }
+    
+    function validateCardNumber(cardNumber) {
+        // اعتبارسنجی شماره کارت با الگوریتم Luhn
+        let sum = 0;
+        let alternate = false;
+        
+        for (let i = cardNumber.length - 1; i >= 0; i--) {
+            let n = parseInt(cardNumber.substring(i, i + 1));
+            
+            if (alternate) {
+                n *= 2;
+                if (n > 9) {
+                    n = (n % 10) + 1;
+                }
+            }
+            
+            sum += n;
+            alternate = !alternate;
+        }
+        
+        return (sum % 10 === 0);
+    }
+    
+    function setupCardHolderInput() {
+        cardHolder.addEventListener('input', function() {
+            // نمایش نام دارنده کارت روی تصویر کارت
+            cardHolderPreview.textContent = this.value || 'نام و نام خانوادگی';
+            
+            // بررسی تکمیل بودن فرم مرحله دوم
+            checkSecondStepCompletion();
+        });
+    }
+    
+    function setupExpiryInputs() {
+        // ورودی ماه
+        monthInput.addEventListener('input', function() {
+            // حذف کاراکترهای غیر عددی
+            this.value = this.value.replace(/\D/g, '');
+            
+            // محدود کردن ورودی ماه به اعداد مجاز
+            const monthVal = parseInt(this.value);
+            if (monthVal > 12) {
+                this.value = '12';
+            } else if (monthVal < 1 && this.value.length === 2) {
+                this.value = '01';
+            }
+            
+            // جهش خودکار به فیلد سال
+            if (this.value.length === 2) {
+                yearInput.focus();
+            }
+            
+            updateExpiryDisplay();
+            checkSecondStepCompletion();
+        });
+        
+        // ورودی سال
+        yearInput.addEventListener('input', function() {
+            // حذف کاراکترهای غیر عددی
+            this.value = this.value.replace(/\D/g, '');
+            
+            updateExpiryDisplay();
+            checkSecondStepCompletion();
+        });
+        
+        // امکان برگشت با Backspace
+        yearInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Backspace' && this.value.length === 0) {
+                monthInput.focus();
+            }
+        });
+    }
+    
+    function updateExpiryDisplay() {
+        // نمایش تاریخ انقضا روی تصویر کارت
+        const month = monthInput.value.padStart(2, '0');
+        const year = yearInput.value.padStart(2, '0');
+        
+        cardExpiryPreview.textContent = month && year ? `${month}/${year}` : 'MM/YY';
+    }
+    
+    function setupCvvInput() {
+        // ورودی CVV
+        cvvInput.addEventListener('focus', function() {
+            // چرخاندن کارت به پشت
+            cardWrapper.classList.add('flipped');
+        });
+        
+        cvvInput.addEventListener('blur', function() {
+            // برگرداندن کارت به جلو
+            cardWrapper.classList.remove('flipped');
+        });
+        
+        cvvInput.addEventListener('input', function() {
+            // حذف کاراکترهای غیر عددی
+            this.value = this.value.replace(/\D/g, '');
+            
+            // نمایش CVV روی تصویر کارت
+            updateCvvDisplay();
+            
+            // بررسی تکمیل بودن فرم مرحله دوم
+            checkSecondStepCompletion();
+        });
+        
+        // دکمه نمایش/مخفی کردن CVV
+        toggleCvvButton.addEventListener('click', function() {
+            const isPassword = cvvInput.type === 'password';
+            cvvInput.type = isPassword ? 'text' : 'password';
+            this.querySelector('i').className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+        });
+    }
+    
+    function updateCvvDisplay() {
+        // نمایش CVV روی تصویر کارت
+        const cvvValue = cvvInput.value;
+        cvvPreview.textContent = cvvValue || '***';
+    }
+    
+    function checkSecondStepCompletion() {
+    // فقط بررسی تکمیل بودن فیلدها
+    const isComplete = cardHolder.value.length > 3 && 
+                      monthInput.value.length === 2 && 
+                      yearInput.value.length === 2 && 
+                      cvvInput.value.length >= 3;
+    
+    // غیرفعال/فعال کردن دکمه مرحله بعد
+    nextButtons[1].disabled = !isComplete;
+}
+
+    
+    function setupFinalCheckbox() {
+        // بررسی موافقت با قوانین
+        agreeTermsCheckbox.addEventListener('change', function() {
+            submitButton.disabled = !this.checked;
+        });
+    }
+    
+    function updateConfirmationDetails() {
+        // نمایش اطلاعات در مرحله تایید نهایی
+        const fullCardNumber = seg1.value + seg2.value + seg3.value + seg4.value;
+        // نمایش شماره کارت با ستاره‌گذاری
+        confirmCardNumber.textContent = `${seg1.value}-${seg2.value}-****-${seg4.value}`;
+        
+        // نام دارنده کارت
+        confirmCardHolder.textContent = cardHolder.value;
+        
+        // اطلاعات بانک
+        const cardInfo = detectCardType(fullCardNumber);
+        confirmBankName.textContent = cardInfo.bank.name;
+        
+        // تاریخ و زمان فعلی
+        const now = new Date();
+        const formattedDate = `${now.getFullYear()}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        currentDateTime.textContent = formattedDate;
+    }
+    
+    // ===== گردش بین مراحل فرم =====
+    function goToNextStep(currentIndex) {
+        // مخفی کردن بخش فعلی
+        sections[currentIndex].classList.remove('active');
+        // نمایش بخش بعدی
+        sections[currentIndex + 1].classList.add('active');
+        
+        // بروزرسانی نوار پیشرفت
+        updateProgressBar(currentIndex + 1);
+        
+        // بروزرسانی اطلاعات مرحله تایید
+        if (currentIndex + 1 === 2) {
+            updateConfirmationDetails();
+        }
+        
+        // برگرداندن کارت به حالت اولیه
+        cardWrapper.classList.remove('flipped');
+    }
+    
+    function goToPrevStep(currentIndex) {
+        // مخفی کردن بخش فعلی
+        sections[currentIndex].classList.remove('active');
+        // نمایش بخش قبلی
+        sections[currentIndex - 1].classList.add('active');
+        
+        // بروزرسانی نوار پیشرفت
+        updateProgressBar(currentIndex - 1);
+        
+        // برگرداندن کارت به حالت اولیه
+        cardWrapper.classList.remove('flipped');
+    }
+    
+    function updateProgressBar(step) {
+        // محاسبه درصد پیشرفت
+        const progress = (step / (sections.length - 1)) * 100;
+        progressFill.style.width = `${progress}%`;
+        
+        // بروزرسانی مراحل
+        progressSteps.forEach((stepEl, index) => {
+            if (index <= step) {
+                stepEl.classList.add('active');
+            } else {
+                stepEl.classList.remove('active');
+            }
+        });
+    }
+    
+    // ===== درخواست رمز پویا =====
+    function setupDynamicPasswordRequest() {
+        requestPasswordButton.addEventListener('click', function() {
+            const fullCardNumber = seg1.value + seg2.value + seg3.value + seg4.value;
+            
+            if (fullCardNumber.length !== 16) {
+                Swal.fire({
+                    title: 'خطا',
+                    text: 'لطفاً ابتدا شماره کارت را به درستی وارد کنید.',
+                    icon: 'error',
+                    confirmButtonText: 'باشه'
+                });
+                return;
+            }
+            
+            // شبیه‌سازی درخواست رمز پویا
+            this.disabled = true;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>در حال ارسال...</span>';
+            
+            setTimeout(() => {
+                Swal.fire({
+                    title: 'ارسال رمز پویا',
+                    text: 'رمز پویا به شماره موبایل شما ارسال شد.',
+                    icon: 'success',
+                    confirmButtonText: 'متوجه شدم'
+                });
+                
+                this.disabled = false;
+                this.innerHTML = '<i class="fas fa-key"></i> <span>درخواست مجدد</span>';
+                
+                // فوکوس روی فیلد رمز پویا
+                dynamicPassword.focus();
+            }, 2000);
+        });
+    }
+    
+    // ===== مدیریت روش‌های پرداخت =====
+    function setupPaymentMethods() {
+        paymentMethods.forEach(method => {
+            method.addEventListener('click', function() {
+                // حذف کلاس active از همه
+                paymentMethods.forEach(m => m.classList.remove('active'));
+                // اضافه کردن کلاس active به روش انتخاب شده
+                this.classList.add('active');
+                
+                // نمایش بخش مربوطه
+                const methodType = this.dataset.method;
+                
+                // مخفی کردن همه روش‌ها
+                cardMethod.style.display = 'none';
+                qrMethod.style.display = 'none';
+                walletMethod.style.display = 'none';
+                form.style.display = 'none';
+                
+                // نمایش روش انتخاب شده
+                if (methodType === 'card') {
+                    cardMethod.style.display = 'block';
+                    form.style.display = 'block';
+                } else if (methodType === 'qr') {
+                    qrMethod.style.display = 'block';
+                    generateQRCode();
+                } else if (methodType === 'wallet') {
+                    walletMethod.style.display = 'flex';
+                }
+            });
+        });
+        
+        // تنظیم دکمه پرداخت با کیف پول
+        if (walletPayButton) {
+            walletPayButton.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'تایید پرداخت',
+                    text: 'آیا از پرداخت با کیف پول اطمینان دارید؟',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'بله، پرداخت شود',
+                    cancelButtonText: 'انصراف'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        simulatePayment();
+                    }
+                });
+            });
+        }
+    }
+    
+    // ===== ارسال فرم و تکمیل پرداخت =====
+    function setupFormSubmission() {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // نمایش حالت در حال بارگیری
+            submitButton.classList.add('loading');
+            submitButton.disabled = true;
+            
+            // شبیه‌سازی پرداخت
+            simulatePayment();
+        });
+    }
+    
+    function simulatePayment() {
+        // شبیه‌سازی پرداخت
+        setTimeout(() => {
+            // نمایش رسید پرداخت
+            Swal.fire({
+                title: 'پرداخت موفق',
+                html: `
+                    <div class="payment-receipt">
+                        <div class="receipt-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="receipt-details">
+                            <p>مبلغ: <strong>2,500,000 تومان</strong></p>
+                            <p>شماره پیگیری: <strong>12345678</strong></p>
+                            <p>تاریخ: <strong>${new Date().toLocaleDateString('fa-IR')}</strong></p>
+                        </div>
+                    </div>
+                `,
+                icon: 'success',
+                confirmButtonText: 'بازگشت به فروشگاه'
+            }).then(() => {
+                // هدایت به صفحه فروشگاه یا رسید
+                window.location.href = 'https://example.com/receipt';
+            });
+        }, 3000);
+    }
+    
+    // ===== راه‌اندازی اولیه =====
+    function init() {
+        // راه‌اندازی تایمر
+        startCountdown();
+        
+        // تنظیم ورودی‌ها
+        setupCardNumberInputs();
+        setupCardHolderInput();
+        setupExpiryInputs();
+        setupCvvInput();
+        setupDynamicPasswordRequest();
+        setupFinalCheckbox();
+        
+        // تنظیم پیمایش بین مراحل
+        nextButtons.forEach((button, index) => {
+            button.addEventListener('click', function() {
+                goToNextStep(index);
+            });
+        });
+        
+        backButtons.forEach((button, index) => {
+            button.addEventListener('click', function() {
+                // شاخص متفاوت است چون دکمه‌های برگشت در بخش اول وجود ندارند
+                goToPrevStep(index + 1);
+            });
+        });
+        
+        // تنظیم روش‌های پرداخت
+        setupPaymentMethods();
+        
+        // تنظیم ارسال فرم
+        setupFormSubmission();
+        
+        // تنظیم QR کد
+        if (window.QRCode) {
+            generateQRCode();
+        }
+    }
+    
+    // شروع برنامه
+    init();
+});
+/**
+ * تابع کمکی برای فرمت کردن مبلغ
+ * @param {number} amount - مبلغ
+ * @returns {string} مبلغ فرمت شده
+ */
+function formatAmount(amount) {
+    return new Intl.NumberFormat('fa-IR').format(amount);
+}
+
+/**
+ * تابع کمکی برای تبدیل اعداد انگلیسی به فارسی
+ * @param {string} str - رشته حاوی اعداد انگلیسی
+ * @returns {string} رشته با اعداد فارسی
+ */
+function toFarsiNumber(str) {
+    if (!str) return '';
+    const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return str.toString().replace(/\d/g, x => farsiDigits[x]);
+}
+
+/**
+ * تابع کمکی برای تبدیل اعداد فارسی به انگلیسی
+ * @param {string} str - رشته حاوی اعداد فارسی
+ * @returns {string} رشته با اعداد انگلیسی
+ */
+function toEnglishNumber(str) {
+    if (!str) return '';
+    return str.toString()
+        .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+        .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+}
+
+/**
+ * تابع کمکی برای تشخیص دستگاه موبایل
+ * @returns {boolean} آیا دستگاه موبایل است
+ */
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+/**
+ * تابع کمکی برای تشخیص مرورگر
+ * @returns {string} نام مرورگر
+ */
+function detectBrowser() {
+    const userAgent = navigator.userAgent;
+    
+    if (userAgent.indexOf("Chrome") > -1) return "Chrome";
+    if (userAgent.indexOf("Safari") > -1) return "Safari";
+    if (userAgent.indexOf("Firefox") > -1) return "Firefox";
+    if (userAgent.indexOf("MSIE") > -1 || userAgent.indexOf("Trident/") > -1) return "IE";
+    if (userAgent.indexOf("Edge") > -1) return "Edge";
+    
+    return "Unknown";
+}
+// راه‌اندازی درگاه پرداخت هنگام بارگذاری صفحه
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const smartPayment = new SmartPayment();
+        
+        // ذخیره نمونه در متغیر جهانی برای دسترسی در کنسول (فقط برای اهداف توسعه)
+        window.smartPayment = smartPayment;
+        
+        console.log('درگاه پرداخت هوشمند با موفقیت راه‌اندازی شد.');
+    } catch (error) {
+        console.error('خطا در راه‌اندازی درگاه پرداخت:', error);
+    }
+});
+/**
+ * فعال‌سازی دکمه‌های درگاه پرداخت
+ * این فایل برای اطمینان از عملکرد صحیح دکمه‌ها استفاده می‌شود
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('فعال‌سازی دکمه‌های درگاه پرداخت...');
+    
+    // فعال‌سازی دکمه‌های مرحله بعد
+    document.querySelectorAll('.next-button').forEach((button, index) => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log(`دکمه بعدی ${index} کلیک شد`);
+            
+            // یافتن بخش فعلی و بخش بعدی
+            const currentSection = this.closest('.form-section');
+            const nextSection = currentSection.nextElementSibling;
+            
+            if (nextSection && nextSection.classList.contains('form-section')) {
+                // مخفی کردن بخش فعلی
+                currentSection.classList.remove('active');
+                
+                // نمایش بخش بعدی
+                nextSection.classList.add('active');
+                
+                // به‌روزرسانی نوار پیشرفت
+                updateProgressBar(index + 1);
+            }
+        });
+    });
+    
+    // فعال‌سازی دکمه‌های مرحله قبل
+    document.querySelectorAll('.back-button').forEach((button, index) => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log(`دکمه قبلی ${index} کلیک شد`);
+            
+            // یافتن بخش فعلی و بخش قبلی
+            const currentSection = this.closest('.form-section');
+            const prevSection = currentSection.previousElementSibling;
+            
+            if (prevSection && prevSection.classList.contains('form-section')) {
+                // مخفی کردن بخش فعلی
+                currentSection.classList.remove('active');
+                
+                // نمایش بخش قبلی
+                prevSection.classList.add('active');
+                
+                // به‌روزرسانی نوار پیشرفت
+                updateProgressBar(index);
+            }
+        });
+    });
+    
+    // فعال‌سازی دکمه ثبت نهایی
+    const submitButton = document.querySelector('.submit-button');
+    if (submitButton) {
+        submitButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('دکمه ثبت نهایی کلیک شد');
+            
+            // نمایش وضعیت بارگذاری
+            this.classList.add('loading');
+            this.disabled = true;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال پردازش...';
+            
+            // شبیه‌سازی ارسال به سرور
+            setTimeout(() => {
+                // نمایش پیام موفقیت
+                showAlert('پرداخت با موفقیت انجام شد', 'success');
+                
+                // ریدایرکت به صفحه موفقیت
+                setTimeout(() => {
+                    window.location.href = window.location.href.includes('?') ? 
+                        window.location.href + '&success=true' : 
+                        window.location.href + '?success=true';
+                }, 2000);
+            }, 2000);
+        });
+    }
+    
+    // فعال‌سازی چک‌باکس موافقت با قوانین
+    const agreeTerms = document.getElementById('agreeTerms');
+    if (agreeTerms && submitButton) {
+        agreeTerms.addEventListener('change', function() {
+            submitButton.disabled = !this.checked;
+        });
+        
+        // تنظیم وضعیت اولیه دکمه ثبت
+        submitButton.disabled = !agreeTerms.checked;
+    }
+    
+    // فعال‌سازی دکمه‌های روش پرداخت
+    document.querySelectorAll('.method').forEach(method => {
+        method.addEventListener('click', function() {
+            // حذف کلاس active از همه
+            document.querySelectorAll('.method').forEach(m => m.classList.remove('active'));
+            
+            // اضافه کردن کلاس active به روش انتخاب شده
+            this.classList.add('active');
+            
+            // نمایش بخش مربوطه
+            const methodType = this.dataset.method;
+            if (methodType) {
+                showPaymentMethod(methodType);
+            }
+        });
+    });
+    
+    console.log('دکمه‌های درگاه پرداخت با موفقیت فعال شدند.');
+});
+
+/**
+ * به‌روزرسانی نوار پیشرفت
+ * @param {number} step - شماره مرحله فعلی
+ */
+function updateProgressBar(step) {
+    const progressSteps = document.querySelectorAll('.step');
+    const progressFill = document.querySelector('.progress-fill');
+    
+    if (!progressSteps.length || !progressFill) return;
+    
+    // به‌روزرسانی کلاس‌های مراحل
+    progressSteps.forEach((stepEl, index) => {
+        if (index < step) {
+            stepEl.classList.add('completed');
+            stepEl.classList.remove('active');
+        } else if (index === step) {
+            stepEl.classList.add('active');
+            stepEl.classList.remove('completed');
+        } else {
+            stepEl.classList.remove('active', 'completed');
+        }
+    });
+    
+    // به‌روزرسانی نوار پیشرفت
+    progressFill.style.width = `${((step + 1) / progressSteps.length) * 100}%`;
+}
+
+/**
+ * نمایش روش پرداخت انتخاب شده
+ * @param {string} methodType - نوع روش پرداخت
+ */
+function showPaymentMethod(methodType) {
+    const cardMethod = document.getElementById('cardMethod');
+    const qrMethod = document.getElementById('qrMethod');
+    const walletMethod = document.getElementById('walletMethod');
+    const form = document.getElementById('smartPaymentForm');
+    
+    // مخفی کردن همه روش‌ها
+    if (cardMethod) cardMethod.style.display = 'none';
+    if (qrMethod) qrMethod.style.display = 'none';
+    if (walletMethod) walletMethod.style.display = 'none';
+    
+    // نمایش روش انتخاب شده
+    switch (methodType) {
+        case 'card':
+            if (cardMethod) cardMethod.style.display = 'flex';
+            if (form) form.style.display = 'block';
+            break;
+        case 'qr':
+            if (qrMethod) qrMethod.style.display = 'block';
+            generateQRCode();
+            break;
+        case 'wallet':
+            if (walletMethod) walletMethod.style.display = 'flex';
+            break;
+    }
+    
+    console.log(`روش پرداخت ${methodType} انتخاب شد`);
+}
+
+/**
+ * تولید QR کد
+ */
+function generateQRCode() {
+    const qrContainer = document.getElementById('qrCode');
+    if (!qrContainer) return;
+    
+    qrContainer.innerHTML = '';
+    
+    // اگر کتابخانه QRCode موجود است، از آن استفاده کن
+    if (window.QRCode) {
+        try {
+            new QRCode(qrContainer, {
+                text: `https://example.com/pay/${Date.now()}`,
+                width: 200,
+                height: 200,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        } catch (error) {
+            console.error('خطا در تولید QR کد:', error);
+            qrContainer.innerHTML = '<div class="qr-error">خطا در تولید QR کد</div>';
+        }
+    } else {
+        // اگر کتابخانه موجود نیست، یک تصویر نمایشی نشان بده
+        qrContainer.innerHTML = `
+            <div class="qr-placeholder">
+                <img src="qr-sample.png" alt="QR Code" width="200" height="200">
+            </div>
+        `;
+    }
+}
+
+/**
+ * نمایش پیام هشدار
+ * @param {string} message - متن پیام
+ * @param {string} type - نوع پیام (success, error, warning, info)
+ */
+function showAlert(message, type = 'info') {
+    // اگر SweetAlert موجود است، از آن استفاده کن
+    if (window.Swal) {
+        Swal.fire({
+            text: message,
+            icon: type,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    } else {
+        // در غیر این صورت، از alert ساده استفاده کن
+        alert(message);
+    }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const monthInput = document.getElementById('month');
+    const yearInput = document.getElementById('year');
+    const nextButton = document.querySelectorAll('.next-button')[1];
+    const cardHolder = document.getElementById('cardHolder');
+    const cvvInput = document.getElementById('cvv');
+
+    // تنظیم رویدادهای ورودی ماه
+    if (monthInput) {
+        monthInput.addEventListener('input', function() {
+            // حذف کاراکترهای غیر عددی
+            this.value = this.value.replace(/\D/g, '');
+            
+            // محدود کردن به دو رقم
+            if (this.value.length > 2) {
+                this.value = this.value.slice(0, 2);
+            }
+            
+            // جهش خودکار به فیلد سال
+            if (this.value.length === 2) {
+                yearInput.focus();
+            }
+
+            updateCardDisplay();
+            checkFormCompletion();
+        });
+    }
+
+    // تنظیم رویدادهای ورودی سال
+    if (yearInput) {
+        yearInput.addEventListener('input', function() {
+            // حذف کاراکترهای غیر عددی
+            this.value = this.value.replace(/\D/g, '');
+            
+            // محدود کردن به دو رقم
+            if (this.value.length > 2) {
+                this.value = this.value.slice(0, 2);
+            }
+
+            updateCardDisplay();
+            checkFormCompletion();
+        });
+    }
+
+    // به‌روزرسانی نمایش کارت
+    function updateCardDisplay() {
+        const cardExpiryPreview = document.getElementById('cardExpiryPreview');
+        if (cardExpiryPreview) {
+            const month = monthInput.value.padStart(2, '0');
+            const year = yearInput.value.padStart(2, '0');
+            cardExpiryPreview.textContent = month && year ? `${month}/${year}` : 'MM/YY';
+        }
+    }
+
+    // بررسی تکمیل فرم
+    function checkFormCompletion() {
+        if (nextButton) {
+            const isComplete = monthInput.value.length === 2 && 
+                             yearInput.value.length === 2 && 
+                             cardHolder.value.length > 3 && 
+                             cvvInput.value.length >= 3;
+            
+            nextButton.disabled = !isComplete;
+        }
+    }
+
+    // اضافه کردن رویدادهای سایر فیلدها
+    if (cardHolder) {
+        cardHolder.addEventListener('input', checkFormCompletion);
+    }
+    
+    if (cvvInput) {
+        cvvInput.addEventListener('input', checkFormCompletion);
+    }
+});
+</script>
+</body>
+</html>
